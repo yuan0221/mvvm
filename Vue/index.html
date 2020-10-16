@@ -1,0 +1,42 @@
+<script>
+  class Vue {
+    constructor(options) {
+      this.$data = options.data;
+
+      this.observer(this.$data);
+    }
+
+    observer(data) {
+      if (!data || typeof data !== 'object')
+        return;
+
+      Object.keys(data).forEach(k => {
+        this.defineReactive(data, k, data[k]);
+      })
+    }
+
+    defineReactive(o, k, v) {
+      this.observer(v);
+      Object.defineProperty(o, k, {
+        enumerable: true,
+        configurable: false,
+        get: () => {
+          return v;
+        },
+        set: newVal => {
+          if (v !== newVal) {
+            console.log(v + '--->' + newVal);
+            v = newVal;
+          }
+        }
+      })
+    }
+  }
+
+  let vm = new Vue({
+    data: {
+      a: 1
+    }
+  })
+
+</script>
